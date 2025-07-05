@@ -1,0 +1,33 @@
+<div class="container mt-5">
+  <h2 class="mb-4">{{ isEdit ? 'Editar' : 'Crear' }} Producto</h2>
+
+  <form (ngSubmit)="save()">
+    <div class="mb-3">
+      <label class="form-label">Nombre</label>
+      <input type="text" class="form-control" [(ngModel)]="product.name" name="name" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Descripción</label>
+      <textarea class="form-control" [(ngModel)]="product.description" name="description" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Precio</label>
+      <input type="number" class="form-control" [(ngModel)]="product.price" name="price" min="0" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Stock</label>
+      <input type="number" class="form-control" [(ngModel)]="product.stock" name="stock" min="0" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Tipo</label>
+      <input type="text" class="form-control" [(ngModel)]="product.type" name="type" required>
+    </div>
+
+    <button class="btn btn-success" type="submit">{{ isEdit ? 'Actualizar' : 'Crear' }}</button>
+    <a routerLink="/products" class="btn btn-secondary ms-2">Cancelar</a>
+  </form>
+</div>

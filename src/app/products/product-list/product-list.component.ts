@@ -1,25 +1,45 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 import { ProductService } from '../product.service';
 import { Product } from './product.model';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   standalone: true,
   selector: 'app-product-list',
-  imports: [CommonModule, HttpClientModule],
   templateUrl: './product-list.component.html',
+  imports: [CommonModule, RouterModule]
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent {
   products: Product[] = [];
-  error = '';
 
-  constructor(private productService: ProductService) {}
+  private productService = inject(ProductService);
+  private auth = inject(AuthService);
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.productService.getAll().subscribe({
-      next: (data) => (this.products = data),
-      error: () => (this.error = 'Error al cargar los productos')
+      next: data => this.products = data,
+      error: () => alert('Error al cargar productos')
     });
   }
+
+  deleteProduct(id: number) {
+    if (confirm('¿Estás seguro de eliminar este producto?')) {
+      this.productService.delete(id).subscribe({
+        next: () => this.products = this.products.filter(p => p.id !== id),
+        error: () => alert('Error al eliminar producto')
+      });
+    }
+  }
+
+  isAdmin(): boolean {
+    const token = this.auth.getToken();
+    if (!token) return false;
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload?.roles?.includes('ADMIN');
+  }
+
+  
 }
