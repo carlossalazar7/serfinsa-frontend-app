@@ -17,19 +17,34 @@ export class ProductService {
     return this.http.get<Product[]>(this.apiUrl, { headers });
   }
   delete(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    const token = localStorage.getItem('jwt_token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers });
   }
-
-  getById(id: number): Observable<Product> {
-    return this.http.get<Product>(`${this.apiUrl}/${id}`);
+  getById(id: number) {
+    const token = localStorage.getItem('jwt_token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.get<Product>(`${this.apiUrl}/${id}`, { headers });
   }
 
   create(product: Product): Observable<Product> {
-    return this.http.post<Product>(this.apiUrl, product);
+    const token = localStorage.getItem('jwt_token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.post<Product>(this.apiUrl, product, { headers });
   }
 
   update(id: number, product: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/${id}`, product);
+    const token = localStorage.getItem('jwt_token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.put<Product>(`${this.apiUrl}/${id}`, product, { headers });
   }
 
 }

@@ -8,8 +8,8 @@ import { Product } from '../product-list/product.model'
 @Component({
   standalone: true,
   selector: 'app-product-form',
-  imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './product-form.component.html'
+  templateUrl: './product-form.component.html',
+  imports: [CommonModule, FormsModule, RouterModule]
 })
 export class ProductFormComponent {
   product: Product = {
@@ -21,11 +21,11 @@ export class ProductFormComponent {
     type: ''
   };
 
+  isEdit = false;
+
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private productService = inject(ProductService);
-
-  isEdit = false;
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -33,12 +33,17 @@ export class ProductFormComponent {
       this.isEdit = true;
       this.productService.getById(+id).subscribe({
         next: data => this.product = data,
-        error: err => alert('No se pudo cargar el producto')
+        error: () => alert('No se pudo cargar el producto')
       });
     }
   }
 
   save() {
+    if (this.product.price < 0 || this.product.stock < 0) {
+      alert('Precio y stock no pueden ser negativos.');
+      return;
+    }
+
     if (this.isEdit) {
       this.productService.update(this.product.id!, this.product).subscribe({
         next: () => this.router.navigate(['/products']),

@@ -38,7 +38,7 @@ export class ProductListComponent {
     if (!token) return false;
 
     const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload?.roles?.includes('ADMIN');
+    return payload?.role?.includes('ADMIN');
   }
 
   

@@ -1,33 +1,86 @@
 <div class="container mt-5">
   <h2 class="mb-4">{{ isEdit ? 'Editar' : 'Crear' }} Producto</h2>
 
-  <form (ngSubmit)="save()">
+  <form (ngSubmit)="save()" #form="ngForm">
     <div class="mb-3">
       <label class="form-label">Nombre</label>
-      <input type="text" class="form-control" [(ngModel)]="product.name" name="name" required>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="product.name"
+        name="name"
+        required
+        #name="ngModel"
+      />
+      <div *ngIf="name.invalid && name.touched" class="text-danger">
+        El nombre es obligatorio.
+      </div>
     </div>
 
     <div class="mb-3">
       <label class="form-label">Descripción</label>
-      <textarea class="form-control" [(ngModel)]="product.description" name="description" required></textarea>
+      <textarea
+        class="form-control"
+        [(ngModel)]="product.description"
+        name="description"
+        required
+        #description="ngModel"
+      ></textarea>
+      <div *ngIf="description.invalid && description.touched" class="text-danger">
+        La descripción es obligatoria.
+      </div>
     </div>
 
     <div class="mb-3">
       <label class="form-label">Precio</label>
-      <input type="number" class="form-control" [(ngModel)]="product.price" name="price" min="0" required>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="product.price"
+        name="price"
+        min="0"
+        required
+        #price="ngModel"
+      />
+      <div *ngIf="price.invalid && price.touched" class="text-danger">
+        El precio debe ser 0 o mayor.
+      </div>
     </div>
 
     <div class="mb-3">
       <label class="form-label">Stock</label>
-      <input type="number" class="form-control" [(ngModel)]="product.stock" name="stock" min="0" required>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="product.stock"
+        name="stock"
+        min="0"
+        required
+        #stock="ngModel"
+      />
+      <div *ngIf="stock.invalid && stock.touched" class="text-danger">
+        El stock debe ser 0 o mayor.
+      </div>
     </div>
 
     <div class="mb-3">
       <label class="form-label">Tipo</label>
-      <input type="text" class="form-control" [(ngModel)]="product.type" name="type" required>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="product.type"
+        name="type"
+        required
+        #type="ngModel"
+      />
+      <div *ngIf="type.invalid && type.touched" class="text-danger">
+        El tipo es obligatorio.
+      </div>
     </div>
 
-    <button class="btn btn-success" type="submit">{{ isEdit ? 'Actualizar' : 'Crear' }}</button>
+    <button class="btn btn-success" type="submit" [disabled]="form.invalid">
+      {{ isEdit ? 'Actualizar' : 'Crear' }}
+    </button>
     <a routerLink="/products" class="btn btn-secondary ms-2">Cancelar</a>
   </form>
 </div>
