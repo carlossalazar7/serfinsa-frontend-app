@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../auth.service';
 
 @Component({
   standalone: true,
@@ -16,18 +16,19 @@ export class LoginComponent {
   error = '';
   loading = false;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router) { }
 
   onLogin() {
     this.loading = true;
     this.auth.login(this.email, this.password).subscribe({
-      next: () => {
+      next: (response) => {
         this.loading = false;
+        localStorage.setItem('token', response.token);
         this.router.navigate(['/products']);
       },
       error: () => {
         this.loading = false;
-        this.error = 'Credenciales inválidas';
+        this.error = 'Credenciales incorrectas';
       }
     });
   }
